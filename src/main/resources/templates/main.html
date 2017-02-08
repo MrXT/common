@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<base th:href="@{/}" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="UTF-8" />
+<title>DEMO</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<link rel="stylesheet" href="static/ace/css/bootstrap.css" />
+<link rel="stylesheet" href="static/ace/css/font-awesome.css" />
+<link rel="stylesheet" href="static/ace/css/ace-fonts.css" />
+<link rel="stylesheet" href="static/ace/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+<link rel="stylesheet" href="static/ace/css/ace.onpage-help.css" />
+<link type="text/css" rel="stylesheet" href="plugins/attention/drag/style.css" />
+<script src='static/ace/js/jquery.js'></script>
+<script src="static/ace/js/bootstrap.js"></script>
+<script src='js/common.js'></script>
+<style type="text/css">
+.commitopacity {
+	position: absolute;
+	width: 100%;
+	height: 100px;
+	background: #7f7f7f;
+	filter: alpha(opacity = 50);
+	-moz-opacity: 0.8;
+	-khtml-opacity: 0.5;
+	opacity: 0.5;
+	top: 0px;
+	z-index: 99999;
+}
+
+#toTop :hover {
+	color: #ffb44b;
+}
+</style>
+
+
+</head>
+<body class="no-skin">
+	<!-- #section:basics/navbar.layout -->
+
+	<!-- 页面顶部¨ -->
+	<div id="navbar" class="navbar navbar-default">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('navbar', 'fixed');
+			} catch (e) {
+			}
+			function logout() {
+				window.location.href = "login/login";
+			}
+		</script>
+		<div class="navbar-container" id="navbar-container">
+			<!-- #section:basics/sidebar.mobile.toggle -->
+			<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+				<span class="sr-only">Toggle sidebar</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+			</button>
+
+			<!-- /section:basics/sidebar.mobile.toggle -->
+			<div class="navbar-header pull-left">
+				<!-- #section:basics/navbar.layout.brand -->
+				<a class="navbar-brand"> <small> <i class="fa fa-leaf"></i> DEMO
+				</small>
+				</a>
+			</div>
+			<div class="navbar-buttons navbar-header pull-right" role="navigation">
+				<ul class="nav ace-nav">
+					<li class="grey"><a data-toggle="dropdown" class="dropdown-toggle" href="#"> <i class="ace-icon fa fa-tasks"></i> <span
+							class="badge badge-grey">2</span>
+					</a>
+
+						<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+							<li class="dropdown-header"><i class="ace-icon fa fa-check"></i> 预留功能,待开发</li>
+							<li class="dropdown-footer"><a href="javascript:"> 预留功能,待开发 <i class="ace-icon fa fa-arrow-right"></i>
+							</a></li>
+						</ul></li>
+					<li class="light-blue"><a data-toggle="dropdown" class="dropdown-toggle" href="#"> <img class="nav-user-photo"
+							src="static/ace/avatars/user.jpg" alt="Jason's Photo" /> <span class="user-info" id="user_info"><small>Welcome</small><span
+								th:text="${session.user.name}"></span></span> <i class="ace-icon fa fa-caret-down"></i>
+					</a>
+						<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+							<!-- <li>
+									<a onclick="editUserH();" style="cursor:pointer;"><i class="ace-icon fa fa-cog"></i>修改资料</a>editUserH()在 WebRoot\static\js\myjs\head.js中
+								</li> -->
+							<li class="divider"></li>
+							<li><a href="javascript:logout();"><i class="ace-icon fa fa-power-off"></i>退出登录</a></li>
+						</ul></li>
+
+					<!-- /section:basics/navbar.user_menu -->
+				</ul>
+			</div>
+			<!-- /section:basics/navbar.dropdown -->
+		</div>
+		<!-- /.navbar-container -->
+	</div>
+	<div id="fhsmsobj">
+		<!-- 站内信声音消息提示 -->
+	</div>
+	<!-- 页面顶部结束 -->
+
+	<div id="websocket_button"></div>
+	<!-- 少了此处，聊天窗口就无法关闭 -->
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('main-container', 'fixed')
+			} catch (e) {
+			}
+		</script>
+		<!-- 左侧菜单 -->
+		<div id="sidebar" class="sidebar  responsive">
+			<script type="text/javascript">
+				try {
+					ace.settings.check('sidebar', 'fixed')
+				} catch (e) {
+				}
+			</script>
+			<!-- 支持3级菜单 -->
+			<ul class="nav nav-list">
+				<li class=""><a href="login/index"> <i class="menu-icon fa fa-tachometer"></i> <span class="menu-text">后台首页</span>
+				</a> <b class="arrow"></b></li>
+				<li th:if="${session.admin}" class="" id="lm0"><a style="cursor: pointer;" class="dropdown-toggle"> <i class="menu-icon fa fa-wrench"></i>
+						<span class="menu-text">系统工具</span><b style="display: block;" class="arrow fa fa-angle-down"></b>
+				</a> <b class="arrow"></b>
+					<ul class="submenu">
+						<li class="" id="z1"><a style="cursor: pointer;" onclick="openMaxWindow('api.html')"> <i
+								class='menu-icon fa fa-leaf black'></i><span>接口文档</span>
+						</a></li>
+						<li class="" id="z2"><a style="cursor: pointer;" target="mainFrame" onclick="siMenu('z2','lm0','系统工具-正向生成','tl/tablecode/manage')"> <i
+								class='menu-icon fa fa-leaf black'></i><span>正向生成</span>
+						</a></li>
+						<li class="" id="z3"><a style="cursor: pointer;" target="mainFrame" onclick="siMenu('z3','lm0','系统工具-统计图表','tool/fusionchartsdemo')"> <i
+								class='menu-icon fa fa-leaf black'></i><span>统计图表</span>
+						</a></li>
+						<li class="" id="z4"><a style="cursor: pointer;" target="mainFrame" onclick="siMenu('z4','lm0','系统工具-表单构建','tool/goFormbuilder')"> <i
+								class='menu-icon fa fa-leaf black'></i><span>表单构建</span>
+						</a></li>
+						<li class="" id="z5"><a style="cursor: pointer;" target="mainFrame" onclick="siMenu('z5','lm0','系统工具-地图','tool/map')"> <i
+								class='menu-icon fa fa-leaf black'></i><span>地图</span>
+						</a></li>
+					</ul></li>
+				<li th:each="menu,index : ${menus}" class="" th:id="${'lm'+menu.menuId}"><a style="cursor: pointer;" class="dropdown-toggle"> <i
+						th:class="${menu.menuIcon == null ? 'menu-icon fa fa-leaf black' : menu.menuIcon}"></i> <span class="menu-text" th:text="${menu.menuName}"></span>
+						<b th:if="${menu.chidren.size() != 0}" style="display: block;" class="arrow fa fa-angle-down"></b>
+				</a><b class="arrow"></b>
+					<ul class="submenu">
+						<li th:each="subMenu: ${menu.chidren}" class="" th:id="${'z'+subMenu.menuId}"><a th:if="${subMenu.menuUrl != null}"
+							style="cursor: pointer;" target="mainFrame"
+							th:onclick="'siMenu(\''+${'z'+subMenu.menuId}+'\',\''+${'lm'+menu.menuId}+'\',\''+${menu.menuName+'-'+subMenu.menuName}+'\',\''+${subMenu.menuUrl}+'\')'">
+								<i th:class="${subMenu.menuIcon == null ? 'menu-icon fa fa-leaf black' : subMenu.menuIcon}"></i><span th:text="${subMenu.menuName}"></span>
+						</a> <a th:if="${subMenu.menuUrl == null}" style="cursor: pointer;" class="dropdown-toggle"> <i
+								th:class="${subMenu.menuIcon == null ? 'menu-icon fa fa-leaf black' : subMenu.menuIcon}"></i> <span class="menu-text"
+								th:text="${subMenu.menuName}"></span> <b th:if="${subMenu.chidren.size() != 0}" style="display: block;" class="arrow fa fa-angle-down"></b>
+						</a> <b class="arrow"></b>
+							<ul class="submenu">
+								<li th:each="subTwoMenu: ${subMenu.chidren}" class="" th:id="${'z'+subTwoMenu.menuId}"><a th:if="${subTwoMenu.menuUrl != null}"
+									style="cursor: pointer;" target="mainFrame"
+									th:onclick="'siMenu(\''+${'z'+subTwoMenu.menuId}+'\',\''+${'lm'+subMenu.menuId}+'\',\''+${subMenu.menuName+'-'+subTwoMenu.menuName}+'\',\''+${subTwoMenu.menuUrl}+'\')'">
+										<i th:class="${subTwoMenu.menuIcon == null ? 'menu-icon fa fa-leaf black' : subTwoMenu.menuIcon}"></i><span th:text="${subTwoMenu.menuName}"></span>
+								</a></li>
+							</ul></li>
+					</ul></li>
+			</ul>
+			<!-- #section:basics/sidebar.layout.minimize -->
+			<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+				<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+			</div>
+
+			<!-- /section:basics/sidebar.layout.minimize -->
+			<script type="text/javascript">
+				try {
+					ace.settings.check('sidebar', 'collapsed')
+				} catch (e) {
+				}
+			</script>
+		</div>
+		<!-- 左侧菜单开始结束 -->
+		<!-- /section:basics/sidebar -->
+		<div class="main-content">
+			<div class="main-content-inner">
+
+				<!-- /section:basics/content.breadcrumbs -->
+				<div class="page-content">
+					<!-- #section:settings.box -->
+					<div class="ace-settings-container" id="ace-settings-container">
+						<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+							<i class="ace-icon fa fa-cog bigger-130"></i>
+						</div>
+
+						<div class="ace-settings-box clearfix" id="ace-settings-box">
+							<div class="pull-left width-50">
+								<!-- #section:settings.skins -->
+								<div class="ace-settings-item">
+									<div class="pull-left">
+										<select id="skin-colorpicker" class="hide">
+											<option data-skin="no-skin" value="#438EB9">#438EB9</option>
+											<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+											<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+											<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+										</select>
+									</div>
+									<span>&nbsp; 选择皮肤</span>
+								</div>
+
+								<!-- #section:settings.breadcrumbs -->
+								<div class="ace-settings-item">
+									<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" /> <label class="lbl" for="ace-settings-breadcrumbs">固定面包屑</label>
+								</div>
+
+								<!-- #section:settings.container -->
+								<div class="ace-settings-item">
+									<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" /> <label class="lbl" for="ace-settings-add-container">
+										居中风格 </label>
+								</div>
+
+								<!-- /section:settings.container -->
+							</div>
+							<!-- /.pull-left -->
+
+							<div class="pull-left width-50">
+								<!-- #section:basics/sidebar.options -->
+								<div class="ace-settings-item">
+									<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover" /> <label class="lbl" for="ace-settings-hover">折叠菜单</label>
+								</div>
+
+								<div class="ace-settings-item">
+									<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" /> <label class="lbl" for="ace-settings-compact">压缩菜单</label>
+								</div>
+
+								<div class="ace-settings-item">
+									<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-highlight" /> <label class="lbl" for="ace-settings-highlight">弹出风格</label>
+								</div>
+
+								<!-- /section:basics/sidebar.options -->
+							</div>
+							<!-- /.pull-left -->
+						</div>
+						<!-- /.ace-settings-box -->
+					</div>
+					<!-- /.ace-settings-container -->
+					<div class="row">
+						<div id="jzts" style="display: none; width: 100%; position: fixed; z-index: 99999999;">
+							<div class="commitopacity" id="bkbgjz"></div>
+							<div style="padding-left: 70%; padding-top: 1px;">
+								<div style="float: left; margin-top: 3px;">
+									<img src="static/images/loadingi.gif" />
+								</div>
+								<div style="margin-top: 6px;">
+									<h4 class="lighter block red">&nbsp;加载中 ...</h4>
+								</div>
+							</div>
+						</div>
+						<iframe name="mainFrame" id="mainFrame" scrolling="no" frameborder="0" src="login/tab" style="margin: 0 auto; width: 100%;"></iframe>
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.page-content -->
+
+			</div>
+		</div>
+		<!-- /.main-content -->
+
+	</div>
+	<!-- /.main-container -->
+
+	<!-- page specific plugin scripts -->
+	<script src="static/ace/js/ace-extra.js"></script>
+	<script src="static/ace/js/ace/elements.scroller.js"></script>
+	<script src="static/ace/js/ace/elements.colorpicker.js"></script>
+	<script src="static/ace/js/ace/elements.fileinput.js"></script>
+	<script src="static/ace/js/ace/elements.typeahead.js"></script>
+	<script src="static/ace/js/ace/elements.wysiwyg.js"></script>
+	<script src="static/ace/js/ace/elements.spinner.js"></script>
+	<script src="static/ace/js/ace/elements.treeview.js"></script>
+	<script src="static/ace/js/ace/elements.wizard.js"></script>
+	<script src="static/ace/js/ace/elements.aside.js"></script>
+	<script src="static/ace/js/ace/ace.js"></script>
+	<script src="static/ace/js/ace/ace.ajax-content.js"></script>
+	<script src="static/ace/js/ace/ace.touch-drag.js"></script>
+	<script src="static/ace/js/ace/ace.sidebar.js"></script>
+	<script src="static/ace/js/ace/ace.sidebar-scroll-1.js"></script>
+	<script src="static/ace/js/ace/ace.submenu-hover.js"></script>
+	<script src="static/ace/js/ace/ace.widget-box.js"></script>
+	<script src="static/ace/js/ace/ace.settings.js"></script>
+	<script src="static/ace/js/ace/ace.settings-rtl.js"></script>
+	<script src="static/ace/js/ace/ace.settings-skin.js"></script>
+	<script src="static/ace/js/ace/ace.widget-on-reload.js"></script>
+	<script src="static/ace/js/ace/ace.searchbox-autocomplete.js"></script>
+	<script type="text/javascript">
+		ace.vars['base'] = '..';
+	</script>
+	<script src="static/ace/js/ace/elements.onpage-help.js"></script>
+	<script src="static/ace/js/ace/ace.onpage-help.js"></script>
+
+	<!--引入属于此页面的js -->
+	<script type="text/javascript" src="static/js/myjs/head.js"></script>
+	<!--引入属于此页面的js -->
+	<script type="text/javascript" src="static/js/myjs/index.js"></script>
+
+	<!--引入弹窗组件1start-->
+	<!--<script type="text/javascript" src="plugins/attention/zDialog/zDrag.js"></script>-->
+	<!--<script type="text/javascript" src="plugins/attention/zDialog/zDialog.js"></script>-->
+	<!--引入弹窗组件1end-->
+
+	<!--引入弹窗组件2start-->
+	<script type="text/javascript" src="plugins/attention/drag/drag.js"></script>
+	<script type="text/javascript" src="plugins/attention/drag/dialog.js"></script>
+	<!--引入弹窗组件2end-->
+	<!--提示框-->
+	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var $toTop = $('<div id="toTop" style="position: fixed; right: 0px; bottom: 3px;height:45px; color: rgba(255, 180, 75, 0.77); font-size: 40px; cursor: pointer;"><span title="回到顶部" class="glyphicon glyphicon-chevron-up"></span></div>')
+			$toTop.appendTo($("body"));
+			$("#toTop").click(function() {
+				$("html").animate({
+					"scrollTop" : "0px"
+				}, 100); //IE,FF
+				$("body").animate({
+					"scrollTop" : "0px"
+				}, 100); //Webkit
+			});
+
+		})
+	</script>
+</body>
+</html>

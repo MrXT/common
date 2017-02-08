@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="head">
+</head>
+<body class="no-skin">
+	<div class="main-container" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="page-content">
+					<div class="row">
+						<div class="col-xs-2">
+							<ul id="tree" class="ztree" style="overflow: auto;"></ul>
+						</div>
+						<div class="col-xs-10">
+							<!-- 检索  -->
+							<form id="searchForm">
+								<table style="margin-top: 5px;">
+									<tr>
+										<td>
+											<div class="nav-search">
+												<span class="input-icon"> <input type="text" placeholder="请输入关键字" class="nav-search-input" style="width: 120px;" autocomplete="off"
+													name="keyword" /> <i class="ace-icon fa fa-search nav-search-icon"></i>
+												</span>
+											</div>
+										</td>
+										<!-- 操作时间查询 -->
+										<td style="padding-left: 2px;">
+											<div class="input-group input-medium date-picker input-daterange">
+												<input name="startDate" id="startDate" class="form-control" type="text" value="" readonly="readonly" style="width: 88px; height: 28px;"
+													placeholder="开始日期" title="开始日期" /> <span class="input-group-addon">-</span><input name="endDate" id="endDate" class="form-control"
+													readonly="readonly" placeholder="结束日期" title="结束日期" style="width: 88px; height: 28px;" type="text" value="" />
+											</div>
+										</td>
+										<!-- 如果要查询失效的数据，去掉注释 -->
+										<td style="vertical-align: top; padding-left: 2px;"><select class="chosen-select form-control" name="valid" data-placeholder="请选择"
+											style="vertical-align: top; width: 90px;">
+												<option value=""></option>
+												<option value="">全部</option>
+												<option value="true">有效</option>
+												<option value="false">无效</option>
+										</select></td>
+
+										<td style="vertical-align: top; padding-left: 2px"><a class="btn btn-light btn-xs" onclick="searchData();" title="检索"><i
+												id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
+										<td style="vertical-align: top; padding-left: 2px"><a class="btn btn-light btn-xs" onclick="clearForm('searchForm');" title="重置"><i
+												class="ace-icon fa fa-circle-o-notch bigger-110 nav-search-icon blue"></i></a></td>
+										<!-- <td style="vertical-align: top; padding-left: 2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i
+												id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td> -->
+									</tr>
+								</table>
+							</form>
+							<!-- 检索  -->
+							<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top: 5px;">
+							</table>
+							<!-- 操作 按钮模版（为了扩展操作按钮，所以提到界面上来，可以很好的自定义）  -->
+							<div style="display: none;" id="optButtonId">
+								<a class="btn btn-xs" th:if="${update}" handle="showIconModal">更换图标</a> <a class="btn btn-xs btn-success" title="编辑" th:if="${update}"
+									handle="savePage"> <i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i></a><a class="btn btn-xs btn-danger"
+									th:if="${invalid}" handle="invalid"> <i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i></a> <a class="btn btn-xs btn-info"
+									th:if="${revalid}" handle="revalid"> <i class="ace-icon fa fa-recycle bigger-120" title="恢复"></i></a>
+							</div>
+							<div class="page-header position-relative">
+								<table style="width: 100%;">
+									<tr>
+										<td style="vertical-align: top;"><a class="btn btn-mini btn-success" th:if="${insert}" onclick="savePage();">新增</a> <a
+											class="btn btn-mini btn-success" onclick="loadData(grandparentId);">返回</a> <!-- <a
+											class="btn btn-mini btn-danger" id="batchInvalid" onclick="makeAll(0);" th:if="${invalid}" title="批量删除"><i
+												class='ace-icon fa fa-trash-o bigger-120'></i></a> --> <!-- 如果要恢复删除的数据打开下面的注释 --> <!-- <a class="btn btn-mini btn-info" id="batchRevalid" onclick="makeAll(1);" th:if="${revalid}"
+											title="批量恢复"><i class='ace-icon fa fa-recycle bigger-120'></i></a>
+										--></td>
+										<!-- 分页 -->
+										<td style="vertical-align: top; float: right; position: relative;" th:include="page"></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<form id="saveForm" class="form-horizontal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">编辑</h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden" name="menuId" id="menuId" />
+						<div class="form-group">
+							<label for="menuName" class="col-sm-2 control-label">菜单名称</label>
+							<div class="col-sm-10">
+								<!-- required="required" check-msg="菜单名称不能为空!"  验证空 -->
+								<input type="text" class="form-control" required="required" check-msg="菜单名称不能为空!" name="menuName" placeholder="请输入菜单名称" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="menuUrl" class="col-sm-2 control-label">菜单地址</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="menuUrl" name="menuUrl" readonly="readonly" placeholder="请输入菜单地址,注意格式*/*/manage" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="menuOrder" class="col-sm-2 control-label">菜单顺序</label>
+							<div class="col-sm-10">
+								<!-- required="required" check-msg="菜单顺序不能为空!"  验证空 -->
+								<input type="text" class="form-control" required="required" check-msg="菜单顺序不能为空!" name="menuOrder" placeholder="请输入菜单顺序" />
+							</div>
+						</div>
+						<!-- <div class="form-group">
+							<label for="menuOrder" class="col-sm-2 control-label">按钮</label>
+							<div class="col-sm-10">
+								<label class="radio-inline"> <input type="radio" name="hasButton" value="true" /> true
+								</label> <label class="radio-inline"> <input type="radio" name="hasButton" value="false" /> false
+								</label>
+							</div>
+						</div> -->
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btn-sm" onclick="clearForm('saveForm');">重置</button>
+						<button id="saveButton" type="button" class="btn btn-primary btn-sm">保存</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal fade bs-example-modal-lg" id="iconModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="myModalLabel">更换图标</h4>
+				</div>
+				<div class="modal-body">
+					<div class="col-sm-12" th:include="icon"></div>
+				</div>
+				<div class="modal-footer">
+					<button id="saveButton" type="button" class="btn btn-primary btn-sm" onclick="saveIcon();">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var jsons = [ {
+			"columnName" : "菜单名称",
+			"propertyName" : "menuName"
+		}, {
+			"columnName" : "菜单地址",
+			"propertyName" : "menuUrl"
+		}, {
+			"columnName" : "菜单顺序",
+			"propertyName" : "menuOrder"
+		}, {
+			"columnName" : "菜单图标",
+			"propertyName" : "menuIcon"
+		} ];
+		var idProperity = "menuId";
+		var datagrid = getDefalutDatagrid(jsons, idProperity,true);
+		var grandparentId = null;
+		var parentId = null;//初始化查询根目录
+		$(function() {
+			
+		});
+		function searchData() {
+			searchDefault(
+					{
+						queryDir : true,//查询菜单目录
+						orderSorts : "[{'order':'menuOrder','sort':'asc'},{'order':'utime','sort':'desc'}]",
+						queryRoot : (parentId == null),
+						parentId : parentId
+					},
+					function(result) {
+						$
+								.each(
+										result.list,
+										function(i, menu) {
+											if (menu.menuUrl == null) {
+												menu.menuName = "<a href='javascript:loadData(\""
+														+ menu.menuId
+														+ "\");'>"
+														+ menu.menuName
+														+ "</a>"
+											}
+											if (menu.menuIcon != null) {
+												menu.menuIcon = "<i class=\""+menu.menuIcon+"\"></i>"
+											}
+										});
+						datagrid.loadData(result.list);
+						var admin = /*[[${session.admin}]]*/;
+						if(admin){//只有超级管理员才有权限修改菜单
+							if (parentId == null) {
+								$("#menuUrl").attr("readonly", "readonly");
+								$("#menuUrl").attr("placeholder", "顶级菜单不允许有地址！");
+							} else {
+								$("#menuUrl").removeAttr("readonly");
+								$("#menuUrl").attr("placeholder","请输入菜单地址,注意格式*/*/manage");
+							}
+						}
+						loadTree();
+					}
+					);
+		}
+		/*
+		 *  新增操作前验证修改请求参数
+		 */
+		function beforeAddUpdateParam(data) {
+			return check(data);
+		}
+		/*
+		 *  修改操作前验证修改请求参数
+		 */
+		function beforeEditUpdateParam(data) {
+			return check(data);
+		}
+		function check(data) {
+			if (data.menuUrl && isNotEmpty(data.menuUrl)) {
+				if (!data.menuUrl.endWith("manage")) {
+					tip($("#menuUrl"), "菜单地址只能已manage结尾！");
+					return false;
+				}
+				data.hasButton = true;//如果有菜单地址，必须有按钮
+			}
+			data.parentId = parentId;
+			return true;
+		}
+		function loadData(id) {
+			parentId = id;
+			if (id != null) {
+				doGet({
+					url : defaultQueryUrl,
+					data : {
+						id : id
+					},
+					success : function(result) {
+						if (result.list.length == 0) {
+							grandparentId = null;
+						} else {
+							grandparentId = result.list[0].parentId;
+						}
+					}
+				});
+			}
+			searchData();
+		}
+		//加载树
+		function loadTree() {
+			doPost({
+				url : "sys/menu/queryMenuTree",
+				data : {
+					menuType : 1
+				},
+				modal:false,
+				success : function(result) {
+					ztree = $.fn.zTree.init($("#tree"),{
+						data: {
+							simpleData: {
+								enable: true
+							}
+						},
+						callback:{
+							onClick:zTreeOnClick
+						}
+					}, result);
+				}
+			});
+		}
+		function zTreeOnClick(event, treeId, treeNode) {
+			var update = /*[[${update}]]*/;
+			if(update){
+				loadData(treeNode.pId);
+				savePage(treeNode);
+			}
+		}
+		//显示图标modal
+		function showIconModal(data) {
+			$("#menuId").val(data.menuId);
+			$("#iconModal").modal('show');
+		}
+		//保存图标
+		function saveIcon() {
+			if ($("#MENU_ICON").val() == "") {
+				alert('请选择图标');
+				return false;
+			}
+			$("#MENU_ICON").val(
+					$("#MENU_ICON").val() + $("#MENU_ICONColor").val());
+			doPost({
+				url : "sys/menu/update",
+				data : {
+					menuId : $("#menuId").val(),
+					menuIcon : $("#MENU_ICON").val()
+				},
+				success : function(result) {
+					$("#iconModal").modal('hide');
+					searchData();
+				}
+			});
+		}
+		/*]]>*/
+	</script>
+</body>
+</html>
+

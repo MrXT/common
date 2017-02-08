@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="head">
+</head>
+<body class="no-skin">
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container" id="main-container">
+		<!-- /section:basics/sidebar -->
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="page-content">
+					<div class="hr hr-18 dotted hr-double"></div>
+					<div class="row">
+						<div class="col-xs-6">
+							<div id="chartdiv_01" align="center"></div>  
+						</div>
+						<div class="col-xs-6">
+							<div id="chartdiv_02" align="center"></div>  
+						</div>
+						<div class="col-xs-6">
+							<div id="chartdiv_03" align="center"></div>  
+						</div>
+						<div class="col-xs-6">
+							<div id="chartdiv_04" align="center"></div>  
+						</div>
+						<div class="col-xs-6">
+							<div id="chartdiv_05" align="center"></div>  
+						</div>
+						<div class="col-xs-6">
+							<div id="chartdiv_06" align="center"></div>  
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="static/FusionCharts/FusionCharts.js"></script>
+	<script th:inline="javascript">
+		var myChart1 = new FusionCharts("static/FusionCharts/Doughnut3D.swf", "chartdiv_01", "400", "400"); 
+		myChart1.setDataXML(/*[[${strXML}]]*/);      
+		myChart1.render("chartdiv_01");  
+		var myChart1 = new FusionCharts("static/FusionCharts/Column3D.swf", "chartdiv_02", "400", "400"); 
+		myChart1.setDataXML(/*[[${strXML}]]*/);      
+		myChart1.render("chartdiv_02");
+		var myChart1 = new FusionCharts("static/FusionCharts/Column2D.swf", "chartdiv_03", "400", "400"); 
+		myChart1.setDataXML(/*[[${strXML}]]*/);      
+		myChart1.render("chartdiv_03");
+		var myChart1 = new FusionCharts("static/FusionCharts/Pie2D.swf", "chartdiv_04", "400", "400"); 
+		myChart1.setDataXML(/*[[${strXML}]]*/);      
+		myChart1.render("chartdiv_04");
+		var myChart1 = new FusionCharts("static/FusionCharts/n-ScrollColumn2D.swf", "chartdiv_05", "400", "400"); 
+		myChart1.setDataXML(/*[[${strXML}]]*/);      
+		myChart1.render("chartdiv_05");
+		var myChart1 = new FusionCharts("static/FusionCharts/Pie3D.swf", "chartdiv_06", "400", "400"); 
+		myChart1.setDataXML(/*[[${strXML}]]*/);      
+		myChart1.render("chartdiv_06");
+	</script>
+</body>
+</html>
+

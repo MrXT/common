@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.module.sys.dao.UserRoleMapper">
+	<resultMap id="BaseResultMap" type="com.project.entity.UserRole">
+		<!-- WARNING - @mbggenerated -->
+		<id column="user_role_id" jdbcType="INTEGER" property="userRoleId" />
+		<result column="user_id" jdbcType="VARCHAR" property="userId" />
+		<result column="role_id" jdbcType="VARCHAR" property="roleId" />
+	</resultMap>
+	<select id="queryRoleByUser" resultType="map">
+		select
+		sr.ROLE_ID as roleId,
+		sr.ROLE_NAME as roleName,
+		sr.ctime as ctime,
+		sr.utime as utime,
+		sr.uid as uid,
+		sr.valid as valid,
+		sur.user_id userId
+		from sys_role sr
+		inner join sys_user_role_rel sur on sur.role_id = sr.role_id
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="valid != null">
+				sr.VALID = #{valid}
+			</if>
+			<if test="userId != null and userId != ''">
+				and sur.user_id = #{userId}
+			</if>
+			<if test="ids != null">
+				and sur.user_id in
+				<foreach collection="ids" open="(" close=")" item="item" separator=",">
+					#{item}
+				</foreach>
+			</if>
+		</trim>
+	</select>
+</mapper>

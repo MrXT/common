@@ -1,0 +1,54 @@
+<base th:href="@{/}" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="static/ace/css/bootstrap.css" />
+<link rel="stylesheet" href="static/ace/css/font-awesome.css" />
+<link rel="stylesheet" href="static/ace/css/ace-fonts.css" />
+<link rel="stylesheet" href="static/ace/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+<link rel="stylesheet" href="static/ace/css/ace.onpage-help.css" />
+<link type="text/css" rel="stylesheet" href="plugins/attention/drag/style.css" />
+<link type="text/css" rel="stylesheet" href="plugins/zTree/3.5/zTreeStyle.css" />
+<link type="text/css" rel="stylesheet" href="css/date-time/bootstrap-datepicker.min.css" />
+<!-- 下拉框 -->
+<link rel="stylesheet" href="static/ace/css/chosen.css" />
+<script src='static/ace/js/jquery.js'></script>
+<script src="static/ace/js/bootstrap.js"></script>
+<!-- 分页 -->
+<script src="js/page/jquery.twbsPagination.min.js"></script>
+<!-- 分页结束 -->
+<script type="text/javascript" src="static/js/jquery.tips.js"></script>
+<!-- 树状 -->
+<script type="text/javascript" src="plugins/zTree/3.5/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="plugins/zTree/3.5/jquery.ztree.excheck.min.js"></script>
+
+
+<script src="static/ace/js/ace/ace.js"></script>
+<!-- 日期框 -->
+<script src="js/date-time/bootstrap-datepicker.min.js"></script>
+<script src="js/date-time/bootstrap-datepicker.zh-CN.min.js"></script>
+<!-- 下拉框 -->
+<script src="static/ace/js/chosen.jquery.js"></script>
+<!-- 删除时确认窗口 -->
+<script src="static/ace/js/bootbox.js"></script>
+
+<!-- 公共js -->
+<script src="js/common.js"></script>
+<!-- 表格数据 -->
+<script src="js/datagrid.js"></script>
+<!-- 日期处理工具 -->
+<script src="js/date.js"></script>
+<script src="js/head.js"></script>
+<style>
+	
+</style>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	var mainUrl = /*[[${url}]]*/;
+	var basePath = /*[[@{/}]]*/;
+	$(function() {
+		if (mainUrl != null) {
+			searchData();// 初始化表格数据
+		}
+	});
+	/*]]>*/
+</script>

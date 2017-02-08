@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.module.sys.dao.RoleMenuMapper">
+	<resultMap id="BaseResultMap" type="com.project.entity.RoleMenu">
+		<!-- WARNING - @mbggenerated -->
+		<id column="role_menu_id" jdbcType="INTEGER" property="roleMenuId" />
+		<result column="role_id" jdbcType="VARCHAR" property="roleId" />
+		<result column="menu_id" jdbcType="VARCHAR" property="menuId" />
+	</resultMap>
+	<select id="queryMenuByUser" resultType="com.project.entity.Menu">
+		select
+		sm.MENU_ID as menuId,
+		sm.MENU_NAME as menuName,
+		sm.MENU_URL as menuUrl,
+		sm.PARENT_ID as parentId,
+		sm.MENU_ORDER as menuOrder,
+		sm.MENU_ICON as menuIcon,
+		sm.VALID as valid,
+		sm.ctime as ctime,
+		sm.utime as utime,
+		sm.uid as uid,
+		sm.MENU_TYPE as menuType
+		from sys_menu sm
+		left join sys_role_menu_rel srm on srm.menu_id = sm.menu_id
+		left join sys_user_role_rel sur on sur.role_id = srm.role_id
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="valid != null">
+				sm.VALID = #{valid}
+			</if>
+			<if test="userId != null and userId != ''">
+				and sur.user_id = #{userId}
+			</if>
+		</trim>
+		order by sm.utime desc
+	</select>
+</mapper>

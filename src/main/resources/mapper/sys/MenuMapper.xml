@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.module.sys.dao.MenuMapper">
+	<resultMap id="BaseResultMap" type="com.project.entity.Menu">
+		<!-- WARNING - @mbggenerated -->
+		<id column="MENU_ID" property="menuId" jdbcType="VARCHAR" />
+		<result column="MENU_NAME" property="menuName" jdbcType="VARCHAR" />
+		<result column="MENU_URL" property="menuUrl" jdbcType="VARCHAR" />
+		<result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+		<result column="MENU_ORDER" property="menuOrder" jdbcType="INTEGER" />
+		<result column="MENU_ICON" property="menuIcon" jdbcType="VARCHAR" />
+		<result column="VALID" property="valid" jdbcType="BIT" />
+		<result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+		<result column="utime" property="utime" jdbcType="TIMESTAMP" />
+		<result column="uid" property="uid" jdbcType="VARCHAR" />
+		<result column="MENU_TYPE" property="menuType" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="baseWhere">
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="menuId != null and menuId != ''">
+				and sm.MENU_ID = #{menuId}
+			</if>
+			<if test="!queryRepeat">
+				<if test="menuName != null and menuName != ''">
+					and sm.MENU_NAME like #{onlyMenuName}
+				</if>
+			</if>
+			<if test="queryRepeat">
+				<if test="menuName != null and menuName != ''">
+					and sm.MENU_NAME = #{menuName}
+				</if>
+				<if test="parentId != null and parentId != ''">
+					and sm.PARENT_ID = #{parentId}
+				</if>
+				<if test="parentId == null or parentId == ''">
+					and sm.PARENT_ID is null
+				</if>
+			</if>
+			<if test="queryDir">
+				and sm.MENU_TYPE != 2<!-- 按钮：2 -->
+			</if>
+			<if test="menuUrl != null and menuUrl != ''">
+				and sm.MENU_URL = #{menuUrl}
+			</if>
+			<if test="queryRoot">
+				and sm.PARENT_ID is null
+			</if>
+			<if test="parentId != null and parentId != ''">
+				and sm.PARENT_ID = #{parentId}
+			</if>
+			<if test="menuOrder != null">
+				and sm.MENU_ORDER = #{menuOrder}
+			</if>
+			<if test="menuIcon != null and menuIcon != ''">
+				and sm.MENU_ICON = #{menuIcon}
+			</if>
+			<if test="valid != null">
+				and sm.VALID = #{valid}
+			</if>
+			<if test="ctime != null">
+				and sm.ctime = #{ctime}
+			</if>
+			<if test="utime != null">
+				and sm.utime = #{utime}
+			</if>
+			<if test="uid != null and uid != ''">
+				and sm.uid = #{uid}
+			</if>
+			<if test="menuType != null">
+				and sm.MENU_TYPE = #{menuType}
+			</if>
+			<if test="startDate != null"> and sm.utime &gt; #{startDate}
+			</if>
+			<if test="endDate != null"> and sm.utime &lt; #{endDate}
+			</if>
+			<if test="keyword != null and keyword != ''">
+      			and (sm.MENU_NAME like #{onlyKeyword} <!-- or 字段二 like #{onlyKeyword} -->)
+			</if>
+		</trim>
+	</sql>
+	<select id="queryMapByCondition" resultType="map">
+		select
+		sm.MENU_ID as menuId,
+		sm.MENU_NAME as menuName,
+		sm.MENU_URL as menuUrl,
+		sm.PARENT_ID as parentId,
+		sm.MENU_ORDER as menuOrder,
+		sm.MENU_ICON as menuIcon,
+		sm.VALID as valid,
+		sm.ctime as ctime,
+		sm.utime as utime,
+		sm.uid as uid,
+		sm.MENU_TYPE as menuType
+		from sys_menu sm
+		<include refid="baseWhere"></include>
+	</select>
+</mapper>

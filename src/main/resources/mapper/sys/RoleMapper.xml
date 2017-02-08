@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.module.sys.dao.RoleMapper" >
+  <resultMap id="BaseResultMap" type="com.project.entity.Role" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+    <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="utime" property="utime" jdbcType="TIMESTAMP" />
+    <result column="uid" property="uid" jdbcType="VARCHAR" />
+    <result column="valid" property="valid" jdbcType="BIT" />
+  </resultMap>
+  <sql id="baseWhere">
+    <trim prefix="where" prefixOverrides="and | or">
+      <if test="roleId != null and roleId != ''">
+        and sr.ROLE_ID = #{roleId}
+      </if>
+      <if test="roleName != null and roleName != ''">
+        and sr.ROLE_NAME like #{onlyRoleName}
+      </if>
+      <if test="ctime != null">
+        and sr.ctime = #{ctime}
+      </if>
+      <if test="utime != null">
+        and sr.utime = #{utime}
+      </if>
+      <if test="uid != null and uid != ''">
+        and sr.uid = #{uid}
+      </if>
+      <if test="valid != null">
+        and sr.valid = #{valid}
+      </if>
+      <if test="startDate != null">
+        and sr.utime &gt; #{startDate}
+      </if>
+      <if test="endDate != null">
+        and sr.utime &lt; #{endDate}
+      </if>
+      <if test="keyword != null and keyword != ''">
+     	 and (sr.ROLE_NAME like #{onlyKeyword})
+      </if>
+    </trim>
+  </sql>
+  <select id="queryMapByCondition" resultType="map">
+    select 
+      sr.ROLE_ID as roleId,
+      sr.ROLE_NAME as roleName,
+      sr.ctime as ctime,
+      sr.utime as utime,
+      sr.uid as uid,
+      sr.valid as valid
+    from sys_role sr
+    <include refid="baseWhere"></include>
+  </select>
+</mapper>

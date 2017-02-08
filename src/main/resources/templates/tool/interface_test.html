@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="head">
+</head>
+<body class="no-skin">
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container" id="main-container">
+		<!-- /section:basics/sidebar -->
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="page-content">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="span12">
+								<div class="widget-box">
+									<div class="widget-header widget-header-blue widget-header-flat wi1dget-header-large">
+										<h4 class="lighter">服务器接口测试</h4>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											<div class="step-content row-fluid position-relative">
+												<input name="form-field-radio1" id="form-field-radio1" onclick="setType('POST');" type="radio" value="icon-edit" checked="checked"
+													class="ace" /><span class="lbl">POST</span>&nbsp;&nbsp; <input name="form-field-radio1" id="form-field-radio2" onclick="setType('GET');"
+													type="radio" value="icon-edit" class="ace" /><span class="lbl">GET</span>
+											</div>
+											<div class="step-content row-fluid position-relative" style="padding-top: 10px;">
+												<div style="float: left;">
+													<span class="input-icon"> <input type="text" id="serverUrl" title="输入请求地址" value="" style="width: 540px;"/> <i
+														class="ace-icon fa fa-globe"></i>
+													</span>
+												</div>
+												<div>
+													&nbsp;&nbsp;<a class="btn btn-sm btn-success" onclick="sendSever();">请求</a> &nbsp;&nbsp;<a class="btn btn-sm btn-info"
+														onclick="gReload();">重置</a>
+												</div>
+											</div>
+											<div class="step-content row-fluid position-relative" style="padding-top: 10px;">
+												<textarea id="json-field" title="返回结果" class="autosize-transition span12" style="width: 690px;"></textarea>
+											</div>
+											<br /> <input type="hidden" name="S_TYPE" id="S_TYPE" value="POST" />
+										</div>
+										<!--/widget-main-->
+									</div>
+									<!--/widget-body-->
+								</div>
+							</div>
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.page-content -->
+			</div>
+		</div>
+	</div>
+	<!--引入属于此页面的js -->
+	<script type="text/javascript" src="static/js/myjs/interfaceTest.js"></script>
+</body>
+</html>
+
